@@ -32,11 +32,13 @@
 //*********************************************************************************************
 //Variables
 //*********************************************************************************************
-
+int estaEncendido = false;
+char color='a';
+char antecolor='a';
 //*********************************************************************************************
 //Prototipos de funciones
 //*********************************************************************************************
-
+void Timer0IntHandler(void);
 //*********************************************************************************************
 //Principal
 //*********************************************************************************************
@@ -82,5 +84,32 @@ int main(void)
     GPIOPinTypeGPIOOutput (GPIO_PORTF_BASE, GPIO_PIN_3) ;//led verde
     while(1){}
 }
+
+void Timer0IntHandler(){
+    TimerIntClear(TIMER0_BASE,  TIMER_TIMA_TIMEOUT);
+        if (estaEncendido){
+            GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3, 0x0);
+        }else{
+            switch(color){
+                            case 'r':
+                                GPIOPinWrite(GPIO_PORTF_BASE,GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3,0x02);
+                                antecolor='r';
+                                break;
+                            case 'g':
+                                GPIOPinWrite(GPIO_PORTF_BASE,GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3,0x08);
+                                antecolor='g';
+                                break;
+                            case 'b':
+                                GPIOPinWrite(GPIO_PORTF_BASE,GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3,0x04);
+                                antecolor='b';
+                                break;
+                            case 'o':
+                                GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3, 0x0);
+                               antecolor='o';
+                                break;
+                                }
+
+        }
+        estaEncendido = !estaEncendido;
 
 
